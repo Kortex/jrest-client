@@ -1,0 +1,59 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+repositories {
+    jcenter()
+}
+
+
+
+sourceSets {
+    intTest {
+        compileClasspath += sourceSets.main.output + configurations.testCompile
+        runtimeClasspath += output + compileClasspath + configurations.testRuntime
+    }
+}
+
+
+dependencies {
+
+    /*** LOG4J ***/
+    implementation 'org.apache.logging.log4j:log4j-core:2.13.0'
+    implementation 'org.apache.logging.log4j:log4j-api:2.13.0'
+
+    /*** JACKSON ***/
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.9.6'
+    implementation 'com.fasterxml.jackson.core:jackson-annotations:2.9.6'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.9.6'
+
+    /*** APACHE ***/
+    implementation 'org.apache.httpcomponents:httpclient:4.5.10'
+
+    /*** TEST DEPENDENCIES ***/
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.5.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.5.1'
+    testImplementation 'org.apache.logging.log4j:log4j-slf4j-impl:2.13.0'
+    testCompile 'org.mockito:mockito-core:3.2.4'
+    testImplementation 'org.mockito:mockito-junit-jupiter:3.2.4'
+    testCompile 'org.assertj:assertj-core:3.14.0'
+    testImplementation 'org.awaitility:awaitility:4.0.1'
+
+}
+
+test {
+    useJUnitPlatform()
+}
+
+task integrationTest(type: Test, group: 'verification') {
+    description = 'Runs integration tests for the project in question'
+    testClassesDirs = sourceSets.intTest.output.classesDirs
+    classpath = sourceSets.intTest.runtimeClasspath
+    outputs.upToDateWhen {
+        false
+    }
+    mustRunAfter test
+}
+
+check.dependsOn integrationTest
