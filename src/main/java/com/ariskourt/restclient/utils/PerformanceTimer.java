@@ -29,10 +29,9 @@ public class PerformanceTimer {
 
     @Override
     public String toString() {
-	return "Start time: " + start + " - End Time: " + stop + ". "
-	    + Optional.ofNullable(elapsed())
-	    .map(elapsed -> "Operation took: " + elapsed + " ms")
-	    .orElse("Time not stopped. Operation is still running..");
+	return Optional.ofNullable(elapsed())
+	    .map(elapsedMs -> "REST call took " + elapsedMs + " ms")
+	    .orElse("Timer hasn't been stopped");
     }
 
 }
