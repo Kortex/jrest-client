@@ -11,14 +11,17 @@ jobs:
           keys:
             - gradle-{{ checksum "build.gradle" }}
       - run:
-          name: Build project
+          name: Building project
           command: GRADLE_OPTS="-Xms256m -Xmx1024m" ./gradlew assemble --no-daemon
       - run:
-          name: Run unit tests
+          name: Running unit tests
           command: GRADLE_OPTS="-Xms256m -Xmx1024m" ./gradlew test --no-daemon --scan
       - run:
-          name: Run integration tests
+          name: Running integration tests
           command: GRADLE_OPTS="-Xms256m -Xmx1024m" ./gradlew integrationTest --no-daemon --scan
+      - run:
+          name: Running Jacoco report
+          command: GRADLE_OPTS="-Xms256m -Xmx1024m" ./gradlew jacocoTestReport --no-daemon --scan
       - save_cache:
           paths:
             - ~/.gradle
@@ -29,3 +32,13 @@ jobs:
       - store_artifacts:
           path: build/libs
           destination: libs
+      - store_test_results:
+          path: build/test-results/test
+      - store_artifacts:
+          path: build/test-results/test
+          when: always
+      - store_test_results:
+          path: build/test-results/integrationTest
+      - store_artifacts:
+          path: build/test-results/integrationTest
+          when: always
