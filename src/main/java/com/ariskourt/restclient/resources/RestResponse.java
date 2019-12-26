@@ -21,6 +21,16 @@ public class RestResponse<R, E> {
 	this.error = error;
     }
 
+    @Override
+    public String toString() {
+	return "RestResponse{" +
+	    "code=" + code +
+	    ", isSuccess=" + isSuccess +
+	    ", response=" + response +
+	    ", error=" + error +
+	    '}';
+    }
+
     public static <R, E> Builder<R, E> builder() {
 	return new Builder<>();
     }
