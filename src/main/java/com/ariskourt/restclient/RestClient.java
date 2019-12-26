@@ -3,7 +3,7 @@ package com.ariskourt.restclient;
 import com.ariskourt.restclient.exceptions.RestClientException;
 import com.ariskourt.restclient.resources.RestResponse;
 import com.ariskourt.restclient.utils.CustomJsonBodyPublisher;
-import com.ariskourt.restclient.utils.CustomerJsonBodyHandler;
+import com.ariskourt.restclient.utils.CustomJsonBodyHandler;
 import com.ariskourt.restclient.utils.HttpMethod;
 import com.ariskourt.restclient.utils.PerformanceTimer;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -201,7 +201,7 @@ public class RestClient {
 
     private <R, E> RestResponse<R, E> sendRequest(HttpRequest request, Class<R> response, Class<E> error) throws ExecutionException, InterruptedException {
         return client
-            .sendAsync(request, new CustomerJsonBodyHandler<>(response, error))
+            .sendAsync(request, new CustomJsonBodyHandler<>(response, error))
             .thenApply(HttpResponse::body)
             .get()
             .get();
