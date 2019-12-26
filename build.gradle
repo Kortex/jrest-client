@@ -12,7 +12,7 @@ repositories {
 sourceCompatibility = 11
 targetCompatibility = 11
 
-version = "0.0.1"
+version = "1.0.0-SNAPSHOT"
 
 mainClassName = "com.ariskourt.restclient.RestClient"
 
