@@ -34,11 +34,17 @@ public class InputStreamUnmarshaller {
 
             try (stream) {
                 if (is2xx(info.statusCode())) {
+                    if (response.equals(Void.class)) {
+                        return responseBuilder.build();
+                    }
                     return responseBuilder
                         .response(mapper.readValue(stream, response))
                         .build();
                 }
 
+                if (error.equals(Void.class)) {
+                    return responseBuilder.build();
+                }
                 return responseBuilder
                     .error(mapper.readValue(stream, error))
                     .build();

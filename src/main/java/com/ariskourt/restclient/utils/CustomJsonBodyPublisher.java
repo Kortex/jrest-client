@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 
 import java.net.http.HttpRequest;
+import java.util.Optional;
 
 public class CustomJsonBodyPublisher {
 
@@ -19,7 +20,11 @@ public class CustomJsonBodyPublisher {
     }
 
     public <P> HttpRequest.BodyPublisher getPublisher(P payload) throws JsonProcessingException {
-        return HttpRequest.BodyPublishers.ofString(writer.writeValueAsString(payload));
+        String written = "";
+        if (payload != null) {
+            written = writer.writeValueAsString(payload);
+        }
+        return HttpRequest.BodyPublishers.ofString(written);
     }
 
     private static ObjectWriter createConfiguredWriter() {

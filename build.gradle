@@ -1,6 +1,8 @@
 plugins {
     id 'java'
     id 'application'
+    id 'com.softeq.gradle.itest' version '1.0.4'
+    id "com.adarshr.test-logger" version "2.0.0"
 }
 
 repositories {
@@ -12,13 +14,13 @@ targetCompatibility = 11
 
 version = "0.0.1"
 
-sourceSets {
-    intTest {
-        compileClasspath += sourceSets.main.output + configurations.testCompile
-        runtimeClasspath += output + compileClasspath + configurations.testRuntime
-    }
-}
+mainClassName = "com.ariskourt.restclient.RestClient"
 
+itestSourceSet {
+    name = "integrationTest"
+    compileClasspath = sourceSets.main.compileClasspath + sourceSets.main.output
+    runtimeClasspath = sourceSets.main.runtimeClasspath + sourceSets.main.output
+}
 
 dependencies {
 
@@ -38,10 +40,15 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.5.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.5.1'
     testImplementation 'org.apache.logging.log4j:log4j-slf4j-impl:2.13.0'
-    testCompile 'org.mockito:mockito-core:3.2.4'
+    testImplementation 'org.mockito:mockito-core:3.2.4'
     testImplementation 'org.mockito:mockito-junit-jupiter:3.2.4'
-    testCompile 'org.assertj:assertj-core:3.14.0'
+    testImplementation 'org.assertj:assertj-core:3.14.0'
     testImplementation 'org.awaitility:awaitility:4.0.1'
+
+    itestImplementation 'org.junit.jupiter:junit-jupiter-api:5.5.1'
+    itestRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.5.1'
+    itestImplementation 'org.apache.logging.log4j:log4j-slf4j-impl:2.13.0'
+    itestImplementation 'org.assertj:assertj-core:3.14.0'
 
 }
 
@@ -49,14 +56,24 @@ test {
     useJUnitPlatform()
 }
 
-task integrationTest(type: Test, group: 'verification') {
-    description = 'Runs integration tests for the project in question'
-    testClassesDirs = sourceSets.intTest.output.classesDirs
-    classpath = sourceSets.intTest.runtimeClasspath
-    outputs.upToDateWhen {
-        false
-    }
-    mustRunAfter test
+integrationTest {
+    useJUnitPlatform()
 }
 
-check.dependsOn integrationTest
+testlogger {
+    theme 'mocha'
+    showExceptions true
+    showStackTraces true
+    showFullStackTraces false
+    showCauses true
+    slowThreshold 500
+    showSummary true
+    showSimpleNames false
+    showPassed true
+    showSkipped true
+    showFailed true
+    showStandardStreams false
+    showPassedStandardStreams true
+    showSkippedStandardStreams true
+    showFailedStandardStreams true
+}
