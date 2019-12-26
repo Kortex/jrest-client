@@ -1,5 +1,7 @@
 package com.ariskourt.restclient;
 
+import com.ariskourt.restclient.resources.RestResponse;
+
 import java.net.http.HttpClient;
 import java.net.http.HttpHeaders;
 import java.net.http.HttpResponse;
@@ -8,6 +10,7 @@ public class MockDataProvider {
 
     public static final String TARGET_MESSAGE = "Some Data";
     public static final String ERROR_MESSAGE = "Some Error Message";
+    public static final String DATA = "Some data";
 
     public static class TargetClass {
 
@@ -68,6 +71,26 @@ public class MockDataProvider {
 		return null;
 	    }
 	};
+    }
+
+    public static class Payload {
+
+        private String data;
+	public String getData() { return data; }
+	public void setData(String data) { this.data = data; }
+
+	public Payload(String data) {
+	    this.data = data;
+	}
+
+    }
+
+    public RestResponse<TargetClass, ErrorClass> createResponse() {
+	return RestResponse.<TargetClass, ErrorClass>builder()
+	    .response(createTarget(200, DATA))
+	    .code(200)
+	    .isSuccess(true)
+	    .build();
     }
 
 }

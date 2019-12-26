@@ -104,7 +104,7 @@ public class RestClient {
             var request = HttpRequest
                 .newBuilder(uriBuilder.build())
                 .header("Content-Type", "application/json")
-                .POST(new CustomJsonBodyPublisher().payloadToString(payload))
+                .POST(new CustomJsonBodyPublisher().getPublisher(payload))
                 .build();
 
             return sendRequest(request, response, error);
@@ -130,7 +130,7 @@ public class RestClient {
             var request = HttpRequest
                 .newBuilder(uriBuilder.build())
                 .header("Content-Type", "application/json")
-                .PUT(new CustomJsonBodyPublisher().payloadToString(payload))
+                .PUT(new CustomJsonBodyPublisher().getPublisher(payload))
                 .build();
 
             return sendRequest(request, response, error);
@@ -156,7 +156,7 @@ public class RestClient {
             var request = HttpRequest
                 .newBuilder(uriBuilder.build())
                 .header("Content-Type", "application/json")
-                .method(HttpMethod.DELETE.name(), new CustomJsonBodyPublisher().payloadToString(payload))
+                .method(HttpMethod.DELETE.name(), new CustomJsonBodyPublisher().getPublisher(payload))
                 .build();
 
             return sendRequest(request, response, error);
@@ -182,7 +182,7 @@ public class RestClient {
             var request = HttpRequest
                 .newBuilder(uriBuilder.build())
                 .header("Content-Type", "application/json")
-                .method(HttpMethod.PATCH.name(), new CustomJsonBodyPublisher().payloadToString(payload))
+                .method(HttpMethod.PATCH.name(), new CustomJsonBodyPublisher().getPublisher(payload))
                 .build();
 
             return sendRequest(request, response, error);

@@ -64,7 +64,7 @@ class PerformanceTimerTest {
     @Test
     public void ToString_WhenTimerNotStopped_CorrectMessageIsReturned() {
         timer.start();
-        assertThat(timer.toString()).contains("Operation is still running");
+        assertThat(timer.toString()).contains("Timer hasn't been stopped");
     }
 
 }

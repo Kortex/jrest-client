@@ -18,7 +18,7 @@ public class CustomJsonBodyPublisher {
         this( createConfiguredWriter());
     }
 
-    public <P> HttpRequest.BodyPublisher payloadToString(P payload) throws JsonProcessingException {
+    public <P> HttpRequest.BodyPublisher getPublisher(P payload) throws JsonProcessingException {
         return HttpRequest.BodyPublishers.ofString(writer.writeValueAsString(payload));
     }
 
