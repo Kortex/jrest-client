@@ -1,0 +1,31 @@
+version: 2
+
+jobs:
+  build:
+    docker:
+      - image: adoptopenjdk/openjdk11-openj9:x86_64-alpine-jdk-11.0.5_10_openj9-0.17.0
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - gradle-{{ checksum "build.gradle" }}
+      - run:
+          name: Build project
+          command: GRADLE_OPTS="-Xms256m -Xmx1024m" ./gradlew assemble --no-daemon
+      - run:
+          name: Run unit tests
+          command: GRADLE_OPTS="-Xms256m -Xmx1024m" ./gradlew test --no-daemon --scan
+      - run:
+          name: Run integration tests
+          command: GRADLE_OPTS="-Xms256m -Xmx1024m" ./gradlew integratioTest --no-daemon --scan
+      - save_cache:
+          paths:
+            - ~/.gradle
+          key: gradle-{{ checksum "build.gradle" }}
+      - store_artifacts:
+          path: build/distributions
+          destination: distributions
+      - store_artifacts:
+          path: build/libs
+          destination: libs
