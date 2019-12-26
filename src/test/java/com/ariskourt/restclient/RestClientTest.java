@@ -2,7 +2,7 @@ package com.ariskourt.restclient;
 
 import com.ariskourt.restclient.exceptions.RestClientException;
 import com.ariskourt.restclient.resources.RestResponse;
-import com.ariskourt.restclient.utils.CustomerJsonBodyHandler;
+import com.ariskourt.restclient.utils.CustomJsonBodyHandler;
 import com.ariskourt.restclient.utils.PerformanceTimer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -16,7 +16,6 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.Collections;
-import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Function;
@@ -61,7 +60,7 @@ class RestClientTest extends MockDataProvider {
     @Test
     @DisplayName("When GET request is performed and client performs everything is returned OK")
     public void GET_WhenClientPerformsOk_ResponseIsReturned() throws Exception {
-        when(client.sendAsync(any(HttpRequest.class), any(CustomerJsonBodyHandler.class))).thenReturn(httpResponseCompletableFuture);
+        when(client.sendAsync(any(HttpRequest.class), any(CustomJsonBodyHandler.class))).thenReturn(httpResponseCompletableFuture);
         when(httpResponseCompletableFuture.thenApply(any(Function.class))).thenReturn(supplierCompletableFuture);
         when(supplierCompletableFuture.get()).thenReturn(supplier);
         when(supplier.get()).thenReturn(createResponse());
@@ -85,7 +84,7 @@ class RestClientTest extends MockDataProvider {
     @Test
     @DisplayName("When GET request is performed with an invalid URI, exception is thrown and handled")
     public void GET_WhenClientThrowsInterruptedException_ExceptionIsCaughtHandled() throws ExecutionException, InterruptedException {
-        when(client.sendAsync(any(HttpRequest.class), any(CustomerJsonBodyHandler.class))).thenReturn(httpResponseCompletableFuture);
+        when(client.sendAsync(any(HttpRequest.class), any(CustomJsonBodyHandler.class))).thenReturn(httpResponseCompletableFuture);
         when(httpResponseCompletableFuture.thenApply(any(Function.class))).thenReturn(supplierCompletableFuture);
         when(supplierCompletableFuture.get()).thenThrow(new InterruptedException("Client got interrupted"));
         assertThrows(RestClientException.class, () -> restClient.GET(SOME_URL, TargetClass.class, ErrorClass.class, Collections.emptyMap()));
@@ -94,7 +93,7 @@ class RestClientTest extends MockDataProvider {
     @Test
     @DisplayName("When GET request is performed with an invalid URI, exception is thrown and handled")
     public void GET_WhenClientThrowsExecutionException_ExceptionIsCaughtHandled() throws ExecutionException, InterruptedException {
-        when(client.sendAsync(any(HttpRequest.class), any(CustomerJsonBodyHandler.class))).thenReturn(httpResponseCompletableFuture);
+        when(client.sendAsync(any(HttpRequest.class), any(CustomJsonBodyHandler.class))).thenReturn(httpResponseCompletableFuture);
         when(httpResponseCompletableFuture.thenApply(any(Function.class))).thenReturn(supplierCompletableFuture);
         when(supplierCompletableFuture.get()).thenThrow(new ExecutionException(new IOException("Some I/O error")));
         assertThrows(RestClientException.class, () -> restClient.GET(SOME_URL, TargetClass.class, ErrorClass.class, Collections.emptyMap()));
@@ -103,7 +102,7 @@ class RestClientTest extends MockDataProvider {
     @Test
     @DisplayName("When POST request is performed and client performs OK, response is returned")
     public void POST_WhenClientPerformsOk_ResponseIsReturned() throws Exception {
-        when(client.sendAsync(any(HttpRequest.class), any(CustomerJsonBodyHandler.class))).thenReturn(httpResponseCompletableFuture);
+        when(client.sendAsync(any(HttpRequest.class), any(CustomJsonBodyHandler.class))).thenReturn(httpResponseCompletableFuture);
         when(httpResponseCompletableFuture.thenApply(any(Function.class))).thenReturn(supplierCompletableFuture);
         when(supplierCompletableFuture.get()).thenReturn(supplier);
         when(supplier.get()).thenReturn(createResponse());
@@ -127,7 +126,7 @@ class RestClientTest extends MockDataProvider {
     @Test
     @DisplayName("When POST request is performed with an invalid URI, exception is thrown and handled")
     public void POST_WhenClientThrowsInterruptedException_ExceptionIsCaughtHandled() throws ExecutionException, InterruptedException {
-        when(client.sendAsync(any(HttpRequest.class), any(CustomerJsonBodyHandler.class))).thenReturn(httpResponseCompletableFuture);
+        when(client.sendAsync(any(HttpRequest.class), any(CustomJsonBodyHandler.class))).thenReturn(httpResponseCompletableFuture);
         when(httpResponseCompletableFuture.thenApply(any(Function.class))).thenReturn(supplierCompletableFuture);
         when(supplierCompletableFuture.get()).thenThrow(new InterruptedException("Client got interrupted"));
         assertThrows(RestClientException.class, () -> restClient.POST(SOME_URL, new Payload(DATA), TargetClass.class, ErrorClass.class, Collections.emptyMap()));
@@ -136,7 +135,7 @@ class RestClientTest extends MockDataProvider {
     @Test
     @DisplayName("When POST request is performed with an invalid URI, exception is thrown and handled")
     public void POST_WhenClientThrowsExecutionException_ExceptionIsCaughtHandled() throws ExecutionException, InterruptedException {
-        when(client.sendAsync(any(HttpRequest.class), any(CustomerJsonBodyHandler.class))).thenReturn(httpResponseCompletableFuture);
+        when(client.sendAsync(any(HttpRequest.class), any(CustomJsonBodyHandler.class))).thenReturn(httpResponseCompletableFuture);
         when(httpResponseCompletableFuture.thenApply(any(Function.class))).thenReturn(supplierCompletableFuture);
         when(supplierCompletableFuture.get()).thenThrow(new ExecutionException(new IOException("Some I/O error")));
         assertThrows(RestClientException.class, () -> restClient.POST(SOME_URL, new Payload(DATA), TargetClass.class, ErrorClass.class, Collections.emptyMap()));
@@ -145,7 +144,7 @@ class RestClientTest extends MockDataProvider {
     @Test
     @DisplayName("When PUT request is performed and client performs OK, response is returned")
     public void PUT_WhenClientPerformsOk_ResponseIsReturned() throws Exception {
-        when(client.sendAsync(any(HttpRequest.class), any(CustomerJsonBodyHandler.class))).thenReturn(httpResponseCompletableFuture);
+        when(client.sendAsync(any(HttpRequest.class), any(CustomJsonBodyHandler.class))).thenReturn(httpResponseCompletableFuture);
         when(httpResponseCompletableFuture.thenApply(any(Function.class))).thenReturn(supplierCompletableFuture);
         when(supplierCompletableFuture.get()).thenReturn(supplier);
         when(supplier.get()).thenReturn(createResponse());
@@ -169,7 +168,7 @@ class RestClientTest extends MockDataProvider {
     @Test
     @DisplayName("When PUT request is performed with an invalid URI, exception is thrown and handled")
     public void PUT_WhenClientThrowsInterruptedException_ExceptionIsCaughtHandled() throws ExecutionException, InterruptedException {
-        when(client.sendAsync(any(HttpRequest.class), any(CustomerJsonBodyHandler.class))).thenReturn(httpResponseCompletableFuture);
+        when(client.sendAsync(any(HttpRequest.class), any(CustomJsonBodyHandler.class))).thenReturn(httpResponseCompletableFuture);
         when(httpResponseCompletableFuture.thenApply(any(Function.class))).thenReturn(supplierCompletableFuture);
         when(supplierCompletableFuture.get()).thenThrow(new InterruptedException("Client got interrupted"));
         assertThrows(RestClientException.class, () -> restClient.PUT(SOME_URL, new Payload(DATA), TargetClass.class, ErrorClass.class, Collections.emptyMap()));
@@ -178,7 +177,7 @@ class RestClientTest extends MockDataProvider {
     @Test
     @DisplayName("When PUT request is performed with an invalid URI, exception is thrown and handled")
     public void PUT_WhenClientThrowsExecutionException_ExceptionIsCaughtHandled() throws ExecutionException, InterruptedException {
-        when(client.sendAsync(any(HttpRequest.class), any(CustomerJsonBodyHandler.class))).thenReturn(httpResponseCompletableFuture);
+        when(client.sendAsync(any(HttpRequest.class), any(CustomJsonBodyHandler.class))).thenReturn(httpResponseCompletableFuture);
         when(httpResponseCompletableFuture.thenApply(any(Function.class))).thenReturn(supplierCompletableFuture);
         when(supplierCompletableFuture.get()).thenThrow(new ExecutionException(new IOException("Some I/O error")));
         assertThrows(RestClientException.class, () -> restClient.PUT(SOME_URL, new Payload(DATA), TargetClass.class, ErrorClass.class, Collections.emptyMap()));
@@ -187,7 +186,7 @@ class RestClientTest extends MockDataProvider {
     @Test
     @DisplayName("When DELETE request is performed and client performs OK, response is returned")
     public void DELETE_WhenClientPerformsOk_ResponseIsReturned() throws Exception {
-        when(client.sendAsync(any(HttpRequest.class), any(CustomerJsonBodyHandler.class))).thenReturn(httpResponseCompletableFuture);
+        when(client.sendAsync(any(HttpRequest.class), any(CustomJsonBodyHandler.class))).thenReturn(httpResponseCompletableFuture);
         when(httpResponseCompletableFuture.thenApply(any(Function.class))).thenReturn(supplierCompletableFuture);
         when(supplierCompletableFuture.get()).thenReturn(supplier);
         when(supplier.get()).thenReturn(createResponse());
@@ -211,7 +210,7 @@ class RestClientTest extends MockDataProvider {
     @Test
     @DisplayName("When PUT request is performed with an invalid URI, exception is thrown and handled")
     public void DELETE_WhenClientThrowsInterruptedException_ExceptionIsCaughtHandled() throws ExecutionException, InterruptedException {
-        when(client.sendAsync(any(HttpRequest.class), any(CustomerJsonBodyHandler.class))).thenReturn(httpResponseCompletableFuture);
+        when(client.sendAsync(any(HttpRequest.class), any(CustomJsonBodyHandler.class))).thenReturn(httpResponseCompletableFuture);
         when(httpResponseCompletableFuture.thenApply(any(Function.class))).thenReturn(supplierCompletableFuture);
         when(supplierCompletableFuture.get()).thenThrow(new InterruptedException("Client got interrupted"));
         assertThrows(RestClientException.class, () -> restClient.DELETE(SOME_URL, new Payload(DATA), TargetClass.class, ErrorClass.class, Collections.emptyMap()));
@@ -220,7 +219,7 @@ class RestClientTest extends MockDataProvider {
     @Test
     @DisplayName("When PUT request is performed with an invalid URI, exception is thrown and handled")
     public void DELETE_WhenClientThrowsExecutionException_ExceptionIsCaughtHandled() throws ExecutionException, InterruptedException {
-        when(client.sendAsync(any(HttpRequest.class), any(CustomerJsonBodyHandler.class))).thenReturn(httpResponseCompletableFuture);
+        when(client.sendAsync(any(HttpRequest.class), any(CustomJsonBodyHandler.class))).thenReturn(httpResponseCompletableFuture);
         when(httpResponseCompletableFuture.thenApply(any(Function.class))).thenReturn(supplierCompletableFuture);
         when(supplierCompletableFuture.get()).thenThrow(new ExecutionException(new IOException("Some I/O error")));
         assertThrows(RestClientException.class, () -> restClient.DELETE(SOME_URL, new Payload(DATA), TargetClass.class, ErrorClass.class, Collections.emptyMap()));
@@ -229,7 +228,7 @@ class RestClientTest extends MockDataProvider {
     @Test
     @DisplayName("When PATCH request is performed and client performs OK, response is returned")
     public void PATCH_WhenClientPerformsOk_ResponseIsReturned() throws Exception {
-        when(client.sendAsync(any(HttpRequest.class), any(CustomerJsonBodyHandler.class))).thenReturn(httpResponseCompletableFuture);
+        when(client.sendAsync(any(HttpRequest.class), any(CustomJsonBodyHandler.class))).thenReturn(httpResponseCompletableFuture);
         when(httpResponseCompletableFuture.thenApply(any(Function.class))).thenReturn(supplierCompletableFuture);
         when(supplierCompletableFuture.get()).thenReturn(supplier);
         when(supplier.get()).thenReturn(createResponse());
@@ -253,7 +252,7 @@ class RestClientTest extends MockDataProvider {
     @Test
     @DisplayName("When PUT request is performed with an invalid URI, exception is thrown and handled")
     public void PATCH_WhenClientThrowsInterruptedException_ExceptionIsCaughtHandled() throws ExecutionException, InterruptedException {
-        when(client.sendAsync(any(HttpRequest.class), any(CustomerJsonBodyHandler.class))).thenReturn(httpResponseCompletableFuture);
+        when(client.sendAsync(any(HttpRequest.class), any(CustomJsonBodyHandler.class))).thenReturn(httpResponseCompletableFuture);
         when(httpResponseCompletableFuture.thenApply(any(Function.class))).thenReturn(supplierCompletableFuture);
         when(supplierCompletableFuture.get()).thenThrow(new InterruptedException("Client got interrupted"));
         assertThrows(RestClientException.class, () -> restClient.PATCH(SOME_URL, new Payload(DATA), TargetClass.class, ErrorClass.class, Collections.emptyMap()));
@@ -262,7 +261,7 @@ class RestClientTest extends MockDataProvider {
     @Test
     @DisplayName("When PATCH request is performed with an invalid URI, exception is thrown and handled")
     public void PATCH_WhenClientThrowsExecutionException_ExceptionIsCaughtHandled() throws ExecutionException, InterruptedException {
-        when(client.sendAsync(any(HttpRequest.class), any(CustomerJsonBodyHandler.class))).thenReturn(httpResponseCompletableFuture);
+        when(client.sendAsync(any(HttpRequest.class), any(CustomJsonBodyHandler.class))).thenReturn(httpResponseCompletableFuture);
         when(httpResponseCompletableFuture.thenApply(any(Function.class))).thenReturn(supplierCompletableFuture);
         when(supplierCompletableFuture.get()).thenThrow(new ExecutionException(new IOException("Some I/O error")));
         assertThrows(RestClientException.class, () -> restClient.PATCH(SOME_URL, new Payload(DATA), TargetClass.class, ErrorClass.class, Collections.emptyMap()));
