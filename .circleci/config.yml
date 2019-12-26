@@ -18,7 +18,7 @@ jobs:
           command: GRADLE_OPTS="-Xms256m -Xmx1024m" ./gradlew test --no-daemon --scan
       - run:
           name: Run integration tests
-          command: GRADLE_OPTS="-Xms256m -Xmx1024m" ./gradlew integratioTest --no-daemon --scan
+          command: GRADLE_OPTS="-Xms256m -Xmx1024m" ./gradlew integrationTest --no-daemon --scan
       - save_cache:
           paths:
             - ~/.gradle
