@@ -55,11 +55,12 @@ public class RestClient {
     }
 
     /***
-     * Method that perform a GET request to the given URI. Performs internal deserialization based on
+     * Method that performs a GET request to the given URI. Performs internal deserialization based on
      * response's HTTP status, mapping either to the expected response type or the expected error type. Will throw
      * a {@link RestClientException} in case a communication error takes takes place or the unmarshalling to the object
      * type fails
      *
+     * @param uri - The uri to perform the call against
      * @param response - The response type class
      * @param error - The error type class
      * @param params - A map representing the params to be added to the request
@@ -95,6 +96,22 @@ public class RestClient {
         }
     }
 
+    /***
+     * Method that performs a POST request for the given URI. Performs internal serialization and deserialization based of
+     * both the request entity and the expected response/error. Will throw a {@link RestClientException} in case of a
+     * communication error, a client error or an unmarshalling error.
+     *
+     * @param uri - The uri to perform the request against
+     * @param payload - The payload to POST
+     * @param response - The expected response class
+     * @param error - The expected error class
+     * @param params - Params to be appended to the URI
+     * @param <R> - The type of the response
+     * @param <E> - The type of the error
+     * @param <P> - The type of the posted payload
+     * @return - A {@link RestResponse} containing the response or the error along with the status code
+     * @throws RestClientException
+     */
     public <R, E, P> RestResponse<R, E> POST(String uri, P payload, Class<R> response, Class<E> error, Map<String, String> params) throws RestClientException {
         try {
             timer.start();
@@ -121,6 +138,22 @@ public class RestClient {
         }
     }
 
+    /***
+     * Method that performs a PUT request for the given URI. Performs internal serialization and deserialization based of
+     * both the request entity and the expected response/error. Will throw a {@link RestClientException} in case of a
+     * communication error, a client error or an unmarshalling error.
+     *
+     * @param uri - The uri to perform the request against
+     * @param payload - The payload to PUT
+     * @param response - The expected response class
+     * @param error - The expected error class
+     * @param params - Params to be appended to the URI
+     * @param <R> - The type of the response
+     * @param <E> - The type of the error
+     * @param <P> - The type of the posted payload
+     * @return - A {@link RestResponse} containing the response or the error along with the status code
+     * @throws RestClientException
+     */
     public <R, E, P> RestResponse<R, E> PUT(String uri, P payload, Class<R> response, Class<E> error, Map<String, String> params) throws RestClientException {
         try {
             timer.start();
@@ -147,6 +180,22 @@ public class RestClient {
         }
     }
 
+    /***
+     * Method that performs a DELETE request for the given URI. Performs internal serialization and deserialization based of
+     * both the request entity and the expected response/error. Will throw a {@link RestClientException} in case of a
+     * communication error, a client error or an unmarshalling error.
+     *
+     * @param uri - The uri to perform the request against
+     * @param payload - The payload to DELETE
+     * @param response - The expected response class
+     * @param error - The expected error class
+     * @param params - Params to be appended to the URI
+     * @param <R> - The type of the response
+     * @param <E> - The type of the error
+     * @param <P> - The type of the posted payload
+     * @return - A {@link RestResponse} containing the response or the error along with the status code
+     * @throws RestClientException
+     */
     public <R, E, P> RestResponse<R, E> DELETE(String uri, P payload, Class<R> response, Class<E> error, Map<String, String> params) throws RestClientException {
         try {
             timer.start();
@@ -173,6 +222,22 @@ public class RestClient {
         }
     }
 
+    /***
+     * Method that performs a PATCH request for the given URI. Performs internal serialization and deserialization based of
+     * both the request entity and the expected response/error. Will throw a {@link RestClientException} in case of a
+     * communication error, a client error or an unmarshalling error.
+     *
+     * @param uri - The uri to perform the request against
+     * @param payload - The payload to PATCH
+     * @param response - The expected response class
+     * @param error - The expected error class
+     * @param params - Params to be appended to the URI
+     * @param <R> - The type of the response
+     * @param <E> - The type of the error
+     * @param <P> - The type of the posted payload
+     * @return - A {@link RestResponse} containing the response or the error along with the status code
+     * @throws RestClientException
+     */
     public <R, E, P> RestResponse<R, E> PATCH(String uri, P payload, Class<R> response, Class<E> error, Map<String, String> params) throws RestClientException {
         try {
             timer.start();
