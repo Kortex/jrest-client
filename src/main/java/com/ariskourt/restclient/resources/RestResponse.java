@@ -1,5 +1,9 @@
 package com.ariskourt.restclient.resources;
 
+import com.ariskourt.restclient.exceptions.RestClientException;
+
+import java.util.function.Supplier;
+
 public class RestResponse<R, E> {
 
     private final Integer code;
@@ -19,6 +23,48 @@ public class RestResponse<R, E> {
 	this.isSuccess = isSuccess;
 	this.response = response;
 	this.error = error;
+    }
+
+    public R getResponseOrElse(R other) {
+        if (response == null) {
+            return other;
+	}
+        return response;
+    }
+
+    public R getResponseOrElseThrow() {
+        if (response == null) {
+            throw new RestClientException();
+	}
+        return response;
+    }
+
+    public <X extends Throwable> R getResponseOrElseThrow(Supplier<? extends X> supplier) throws X {
+        if (response == null) {
+            throw supplier.get();
+	}
+        return response;
+    }
+
+    public E getErrorOrElse(E other) {
+        if (error == null) {
+            return other;
+	}
+        return error;
+    }
+
+    public E getErrorOrElseThrow() {
+        if (error == null) {
+            throw new RestClientException();
+	}
+        return error;
+    }
+
+    public <X extends Throwable> E getErrorOrElseThrow(Supplier<? extends X> supplier) throws X {
+        if (error == null) {
+            throw supplier.get();
+	}
+        return error;
     }
 
     @Override
