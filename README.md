@@ -1,4 +1,4 @@
-## Simple Java REST client
+## JREST client
 
 [![CircleCI](https://circleci.com/gh/Kortex/simple-rest-client.svg?style=svg)](https://circleci.com/gh/Kortex/simple-rest-client) [![Known Vulnerabilities](https://snyk.io/test/github/Kortex/simple-rest-client/badge.svg?targetFile=build.gradle)](https://snyk.io/test/github/Kortex/simple-rest-client?targetFile=build.gradle)
 
