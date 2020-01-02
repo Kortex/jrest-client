@@ -1,8 +1,6 @@
 ## JREST client
 
-[![CircleCI](https://circleci.com/gh/Kortex/jrest-client.svg?style=svg)](https://circleci.com/gh/Kortex/jrest-client)
-
-[![Known Vulnerabilities](https://snyk.io/test/github/Kortex/simple-rest-client/badge.svg?targetFile=build.gradle)](https://snyk.io/test/github/Kortex/simple-rest-client?targetFile=build.gradle)
+[![CircleCI](https://circleci.com/gh/Kortex/jrest-client.svg?style=svg)](https://circleci.com/gh/Kortex/jrest-client)[![Known Vulnerabilities](https://snyk.io/test/github/Kortex/simple-rest-client/badge.svg?targetFile=build.gradle)](https://snyk.io/test/github/Kortex/simple-rest-client?targetFile=build.gradle)
 
 The following project acts as a simple abstraction wrapping calls to Java's `HttpClient` and exposing a simple and easy
 to use API offering methods to perform RESTful API calls.
