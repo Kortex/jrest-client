@@ -4,7 +4,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: adoptopenjdk/openjdk11:jdk-11.0.11_9-tumbleweed-slim
+      - image: adoptopenjdk/openjdk11:jdk-11.0.11_9-tumbleweed
     environment:
       GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.workers.max=2"
     working_directory: ~/repo
@@ -44,7 +44,7 @@ jobs:
           path: build/test-results/integrationTest
   jar:
     docker:
-      - image: adoptopenjdk/openjdk11:jdk-11.0.11_9-tumbleweed-slim
+      - image: adoptopenjdk/openjdk11:jdk-11.0.11_9-tumbleweed
     environment:
       GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.workers.max=2"
       working_directory: ~/repo
