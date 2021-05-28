@@ -16,12 +16,6 @@ jobs:
       - run:
           name: Building project
           command: ./gradlew assemble
-      - run:
-          name: Running unit tests
-          command: ./gradlew test --scan
-      - run:
-          name: Running integration tests
-          command: ./gradlew integrationTest --scan
       - save_cache:
           paths:
             - ~/.gradle/wrapper
@@ -106,8 +100,16 @@ workflows:
   build-and-test:
     jobs:
       - build
-      - test
-      - integration-test
+      - test:
+          requires:
+            - build
+      - integration-test:
+          requires:
+            - build
   create-jar:
     jobs:
-      - jar
+      - jar:
+          requires:
+            - build
+            - test
+            - integration-test
