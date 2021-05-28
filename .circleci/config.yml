@@ -1,6 +1,5 @@
 version: 2
 
-
 jobs:
   build:
     docker:
@@ -23,9 +22,28 @@ jobs:
       - run:
           name: Running integration tests
           command: ./gradlew integrationTest --scan
+      - save_cache:
+          paths:
+            - ~/.gradle/wrapper
+          key: v1-gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+      - save_cache:
+          paths:
+            - ~/.gradle/caches
+          key: v1-gradle-cache-{{ checksum "build.gradle" }}
+  test:
+    docker:
+      - image: adoptopenjdk/openjdk11:jdk-11.0.11_9-alpine
+    environment:
+      GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.workers.max=2"
+    working_directory: ~/repo
+    steps:
+      - restore_cache:
+          key: v1-gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+      - restore_cache:
+          key: v1-gradle-cache-{{ checksum "build.gradle" }}
       - run:
-          name: Running Jacoco report
-          command: ./gradlew jacocoTestReport --scan
+          name: Running unit tests
+          command: ./gradlew test --scan
       - save_cache:
           paths:
             - ~/.gradle/wrapper
@@ -38,6 +56,29 @@ jobs:
           path: build/test-results/test
       - store_artifacts:
           path: build/test-results/test
+
+  integration-test:
+    docker:
+      - image: adoptopenjdk/openjdk11:jdk-11.0.11_9-alpine
+    environment:
+      GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.workers.max=2"
+    working_directory: ~/repo
+    steps:
+      - restore_cache:
+          key: v1-gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+      - restore_cache:
+          key: v1-gradle-cache-{{ checksum "build.gradle" }}
+      - run:
+          name: Running integration tests
+          command: ./gradlew integrationTest --scan
+      - save_cache:
+          paths:
+            - ~/.gradle/wrapper
+          key: v1-gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+      - save_cache:
+          paths:
+            - ~/.gradle/caches
+          key: v1-gradle-cache-{{ checksum "build.gradle" }}
       - store_test_results:
           path: build/test-results/integrationTest
       - store_artifacts:
@@ -59,3 +100,14 @@ jobs:
           command: ./gradlew jar
       - store_artifacts:
           path: build/libs
+
+workflows:
+  version: 2
+  build-and-test:
+    jobs:
+      - build
+      - test
+      - integration-test
+  create-jar:
+    jobs:
+      - jar
