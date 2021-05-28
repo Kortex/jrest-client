@@ -6,11 +6,8 @@ public class SingleUserResource {
     public UserResource getData() { return data; }
     public void setData(UserResource data) { this.data = data; }
 
-    @Override
-    public String toString() {
-	return "SingleUserResource{" +
-	    "data=" + data +
-	    '}';
-    }
+    private SupportResource support;
+    public SupportResource getSupport() { return support; }
+    public void setSupport(SupportResource support) { this.support = support; }
 
 }
