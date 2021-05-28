@@ -2,12 +2,12 @@ plugins {
     id 'java'
     id 'application'
     id 'com.softeq.gradle.itest' version '1.0.4'
-    id "com.adarshr.test-logger" version "2.0.0"
+    id "com.adarshr.test-logger" version "3.0.0"
     id 'jacoco'
 }
 
 repositories {
-    jcenter()
+    mavenCentral()
 }
 
 sourceCompatibility = 11
@@ -15,7 +15,9 @@ targetCompatibility = 11
 
 version = "1.0.0-SNAPSHOT"
 
-mainClassName = "com.ariskourt.restclient.RestClient"
+application {
+    mainClassName = "com.ariskourt.restclient.RestClient"
+}
 
 itestSourceSet {
     name = "integrationTest"
@@ -55,10 +57,12 @@ dependencies {
 
 test {
     useJUnitPlatform()
+    finalizedBy jacocoTestReport
 }
 
 integrationTest {
     useJUnitPlatform()
+    finalizedBy jacocoTestReport
 }
 
 testlogger {
