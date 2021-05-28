@@ -97,7 +97,7 @@ jobs:
 
 workflows:
   version: 2
-  build-and-test:
+  build-and-test-jar:
     jobs:
       - build
       - test:
@@ -106,8 +106,6 @@ workflows:
       - integration-test:
           requires:
             - build
-  create-jar:
-    jobs:
       - jar:
           requires:
             - build
