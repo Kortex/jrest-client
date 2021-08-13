@@ -55,6 +55,11 @@ dependencies {
 
 }
 
+/* Parallelize Test Execution */
+tasks.withType(Test) {
+    maxParallelForks = Runtime.runtime.availableProcessors().intdiv(2) ?: 1
+}
+
 test {
     useJUnitPlatform()
     finalizedBy jacocoTestReport
