@@ -3,29 +3,113 @@ version: 2
 jobs:
   build:
     docker:
-      - image: adoptopenjdk/openjdk11-openj9:x86_64-alpine-jdk-11.0.5_10_openj9-0.17.0
+      - image: adoptopenjdk/openjdk11:jdk-11.0.11_9-alpine
+    environment:
+      GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.workers.max=2"
     working_directory: ~/repo
     steps:
       - checkout
       - restore_cache:
-          keys:
-            - gradle-{{ checksum "build.gradle" }}
+          key: v1-gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+      - restore_cache:
+          key: v1-gradle-cache-{{ checksum "build.gradle" }}
       - run:
-          name: Build project
-          command: GRADLE_OPTS="-Xms256m -Xmx1024m" ./gradlew assemble --no-daemon
-      - run:
-          name: Run unit tests
-          command: GRADLE_OPTS="-Xms256m -Xmx1024m" ./gradlew test --no-daemon --scan
-      - run:
-          name: Run integration tests
-          command: GRADLE_OPTS="-Xms256m -Xmx1024m" ./gradlew integrationTest --no-daemon --scan
+          name: Building project
+          command: ./gradlew assemble
       - save_cache:
           paths:
-            - ~/.gradle
-          key: gradle-{{ checksum "build.gradle" }}
+            - ~/.gradle/wrapper
+          key: v1-gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+      - save_cache:
+          paths:
+            - ~/.gradle/caches
+          key: v1-gradle-cache-{{ checksum "build.gradle" }}
+  test:
+    docker:
+      - image: adoptopenjdk/openjdk11:jdk-11.0.11_9-alpine
+    environment:
+      GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.workers.max=2"
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - restore_cache:
+          key: v1-gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+      - restore_cache:
+          key: v1-gradle-cache-{{ checksum "build.gradle" }}
+      - run:
+          name: Running unit tests
+          command: ./gradlew test --scan
+      - save_cache:
+          paths:
+            - ~/.gradle/wrapper
+          key: v1-gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+      - save_cache:
+          paths:
+            - ~/.gradle/caches
+          key: v1-gradle-cache-{{ checksum "build.gradle" }}
+      - store_test_results:
+          path: build/test-results/test
       - store_artifacts:
-          path: build/distributions
-          destination: distributions
+          path: build/test-results/test
+
+  integration-test:
+    docker:
+      - image: adoptopenjdk/openjdk11:jdk-11.0.11_9-alpine
+    environment:
+      GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.workers.max=2"
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - restore_cache:
+          key: v1-gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+      - restore_cache:
+          key: v1-gradle-cache-{{ checksum "build.gradle" }}
+      - run:
+          name: Running integration tests
+          command: ./gradlew integrationTest --scan
+      - save_cache:
+          paths:
+            - ~/.gradle/wrapper
+          key: v1-gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+      - save_cache:
+          paths:
+            - ~/.gradle/caches
+          key: v1-gradle-cache-{{ checksum "build.gradle" }}
+      - store_test_results:
+          path: build/test-results/integrationTest
+      - store_artifacts:
+          path: build/test-results/integrationTest
+  jar:
+    docker:
+      - image: adoptopenjdk/openjdk11:jdk-11.0.11_9-alpine
+    environment:
+      GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.workers.max=2"
+      working_directory: ~/repo
+    steps:
+      - checkout
+      - restore_cache:
+          key: v1-gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+      - restore_cache:
+          key: v1-gradle-cache-{{ checksum "build.gradle" }}
+      - run:
+          name: Creating project jar
+          command: ./gradlew jar
       - store_artifacts:
           path: build/libs
-          destination: libs
+
+workflows:
+  version: 2
+  build-and-test-jar:
+    jobs:
+      - build
+      - test:
+          requires:
+            - build
+      - integration-test:
+          requires:
+            - build
+      - jar:
+          requires:
+            - build
+            - test
+            - integration-test

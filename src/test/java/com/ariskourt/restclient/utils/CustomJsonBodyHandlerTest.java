@@ -19,17 +19,17 @@ import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class CustomerJsonBodyHandlerTest extends MockDataProvider {
+class CustomJsonBodyHandlerTest extends MockDataProvider {
 
     @Mock
     private InputStreamUnmarshaller unmarshaller;
 
-    private CustomerJsonBodyHandler<TargetClass, ErrorClass> handler;
+    private CustomJsonBodyHandler<TargetClass, ErrorClass> handler;
     private Supplier<RestResponse<TargetClass, ErrorClass>> supplier;
 
     @BeforeEach
     void setUp() {
-        handler = new CustomerJsonBodyHandler<>(TargetClass.class, ErrorClass.class, unmarshaller);
+        handler = new CustomJsonBodyHandler<>(TargetClass.class, ErrorClass.class, unmarshaller);
         supplier = () -> RestResponse.<TargetClass, ErrorClass>builder()
             .response(createTarget(200, "Some Data"))
             .build();
@@ -53,7 +53,7 @@ class CustomerJsonBodyHandlerTest extends MockDataProvider {
     @Test
     @DisplayName("Verify correct default constructor call")
     public void DefaultConstructor_WhenCalled_CorrectInitialization() {
-        assertNotNull(new CustomerJsonBodyHandler<>(TargetClass.class, ErrorClass.class));
+        assertNotNull(new CustomJsonBodyHandler<>(TargetClass.class, ErrorClass.class));
     }
 
 

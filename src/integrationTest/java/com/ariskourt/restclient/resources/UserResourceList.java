@@ -28,6 +28,10 @@ public class UserResourceList {
     public List<UserResource> getData() { return data; }
     public void setData(List<UserResource> data) { this.data = data; }
 
+    private SupportResource support;
+    public SupportResource getSupport() { return support; }
+    public void setSupport(SupportResource support) { this.support = support; }
+
     @Override
     public String toString() {
         return "UserResourceList{" +

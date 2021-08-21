@@ -2,11 +2,12 @@ plugins {
     id 'java'
     id 'application'
     id 'com.softeq.gradle.itest' version '1.0.4'
-    id "com.adarshr.test-logger" version "2.0.0"
+    id "com.adarshr.test-logger" version "3.0.0"
+    id 'jacoco'
 }
 
 repositories {
-    jcenter()
+    mavenCentral()
 }
 
 sourceCompatibility = 11
@@ -14,7 +15,9 @@ targetCompatibility = 11
 
 version = "1.0.0-SNAPSHOT"
 
-mainClassName = "com.ariskourt.restclient.RestClient"
+application {
+    mainClassName = "com.ariskourt.restclient.RestClient"
+}
 
 itestSourceSet {
     name = "integrationTest"
@@ -22,42 +25,52 @@ itestSourceSet {
     runtimeClasspath = sourceSets.main.runtimeClasspath + sourceSets.main.output
 }
 
+def JUNIT_JUPITER_VERSION = "5.7.2"
+def JACKSON_VERSION = "2.12.4"
+
 dependencies {
 
     /*** LOG4J ***/
-    implementation 'org.apache.logging.log4j:log4j-core:2.13.0'
-    implementation 'org.apache.logging.log4j:log4j-api:2.13.0'
+    implementation 'org.apache.logging.log4j:log4j-core:2.14.1'
+    implementation 'org.apache.logging.log4j:log4j-api:2.14.1'
 
     /*** JACKSON ***/
-    implementation 'com.fasterxml.jackson.core:jackson-core:2.9.6'
-    implementation 'com.fasterxml.jackson.core:jackson-annotations:2.9.6'
-    implementation 'com.fasterxml.jackson.core:jackson-databind:2.9.6'
+    implementation "com.fasterxml.jackson.core:jackson-core:${JACKSON_VERSION}"
+    implementation "com.fasterxml.jackson.core:jackson-annotations:${JACKSON_VERSION}"
+    implementation "com.fasterxml.jackson.core:jackson-databind:${JACKSON_VERSION}"
 
     /*** APACHE ***/
-    implementation 'org.apache.httpcomponents:httpclient:4.5.10'
+    implementation 'org.apache.httpcomponents:httpclient:4.5.13'
 
     /*** TEST DEPENDENCIES ***/
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.5.1'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.5.1'
-    testImplementation 'org.apache.logging.log4j:log4j-slf4j-impl:2.13.0'
-    testImplementation 'org.mockito:mockito-core:3.2.4'
-    testImplementation 'org.mockito:mockito-junit-jupiter:3.2.4'
-    testImplementation 'org.assertj:assertj-core:3.14.0'
-    testImplementation 'org.awaitility:awaitility:4.0.1'
+    testImplementation "org.junit.jupiter:junit-jupiter-api:${JUNIT_JUPITER_VERSION}"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${JUNIT_JUPITER_VERSION}"
+    testImplementation 'org.apache.logging.log4j:log4j-slf4j-impl:2.14.1'
+    testImplementation 'org.mockito:mockito-core:3.12.1'
+    testImplementation 'org.mockito:mockito-junit-jupiter:3.12.1'
+    testImplementation 'org.assertj:assertj-core:3.20.2'
+    testImplementation 'org.awaitility:awaitility:4.1.0'
 
-    itestImplementation 'org.junit.jupiter:junit-jupiter-api:5.5.1'
-    itestRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.5.1'
-    itestImplementation 'org.apache.logging.log4j:log4j-slf4j-impl:2.13.0'
-    itestImplementation 'org.assertj:assertj-core:3.14.0'
+    itestImplementation "org.junit.jupiter:junit-jupiter-api:${JUNIT_JUPITER_VERSION}"
+    itestRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${JUNIT_JUPITER_VERSION}"
+    itestImplementation 'org.apache.logging.log4j:log4j-slf4j-impl:2.14.1'
+    itestImplementation 'org.assertj:assertj-core:3.20.2'
 
+}
+
+/* Parallelize Test Execution */
+tasks.withType(Test) {
+    maxParallelForks = Runtime.runtime.availableProcessors().intdiv(2) ?: 1
 }
 
 test {
     useJUnitPlatform()
+    finalizedBy jacocoTestReport
 }
 
 integrationTest {
     useJUnitPlatform()
+    finalizedBy jacocoTestReport
 }
 
 testlogger {
@@ -76,4 +89,11 @@ testlogger {
     showPassedStandardStreams true
     showSkippedStandardStreams true
     showFailedStandardStreams true
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled false
+        csv.enabled false
+    }
 }

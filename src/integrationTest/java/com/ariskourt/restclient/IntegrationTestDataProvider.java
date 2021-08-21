@@ -5,8 +5,6 @@ import com.ariskourt.restclient.resources.UserModificationResource;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.UUID;
-
 public class IntegrationTestDataProvider {
 
     static final Logger LOGGER = LogManager.getLogger(IntegrationTestDataProvider.class);
