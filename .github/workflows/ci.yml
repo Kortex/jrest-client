@@ -17,6 +17,7 @@ defaults:
 
 jobs:
   validate-wrapper:
+    name: "Validate Gradle wrapper"
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout code
