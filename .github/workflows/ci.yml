@@ -25,7 +25,9 @@ jobs:
         uses: gradle/wrapper-validation-action@e6e38bacfdf1a337459f332974bb2327a31aaf4b
 
   build:
+    name: "Build project"
     runs-on: ubuntu-20.04
+    needs: validate-wrapper
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -37,10 +39,11 @@ jobs:
           cache: 'gradle'
       - name: Build project
         run: ./gradlew assemble
-    needs: validate-wrapper
 
   test:
+    name: "Test project"
     runs-on: ubuntu-20.04
+    needs: build
     strategy:
       matrix:
         stage: [test, integrationTest]
@@ -53,17 +56,34 @@ jobs:
           distribution: 'temurin'
           java-version: '11'
           cache: 'gradle'
-      - name: Run ${{matrix.stage}} tests
-        run: ./gradlew ${{matrix.stage}} --scan
-      - name: Upload ${{matrix.stage}} report
+      - name: Run ${{matrix.stage}}s
+        run: ./gradlew ${{ matrix.stage }} --scan
+      - name: Upload ${{ matrix.stage }} report
+        uses: actions/upload-artifact@v2
+        with:
+          name: Test results for ${{ matrix.stage }} stage
+          path: build/test-results/${{ matrix.stage }}/*.xml
+        if: always()
+
+  publish-test-results:
+    name: "Publish test reports"
+    runs-on: ubuntu-20.04
+    if: success() || failure()
+    needs: build
+    steps:
+      - name: Fetch Artifacts
+        uses: actions/download-artifact@v2
+        with:
+          path: artifacts
+      - name: Publish Test Results
         uses: EnricoMi/publish-unit-test-result-action@v1
         with:
-          files: build/test-results/${{matrix.stage}}/*.xml
-        if: always()
-    needs: build
+          files: artifacts/**/*.xml
 
   jar:
+    name: "Create project jar"
     runs-on: ubuntu-20.04
+    needs: [ build, test ]
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -81,4 +101,3 @@ jobs:
           name: jrest-clien-jar
           path: build/libs/*.jar
           retention-days: 7
-    needs: [ build, test ]
