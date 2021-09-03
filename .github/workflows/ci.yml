@@ -98,6 +98,6 @@ jobs:
       - name: Upload artifacts
         uses: actions/upload-artifact@v2
         with:
-          name: jrest-clien-jar
+          name: jrest-client-jar
           path: build/libs/*.jar
           retention-days: 7
