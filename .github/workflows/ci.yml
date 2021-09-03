@@ -1,0 +1,37 @@
+name: JRest Client CI
+
+on:
+  push:
+    branches:
+      - main
+      - master
+      - develop
+  pull_request:
+
+env:
+  GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.workers.max=2"
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  validate-wrapper:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Validate Gradle Wrapper
+        uses: gradle/wrapper-validation-action@e6e38bacfdf1a337459f332974bb2327a31aaf4b
+  build:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Setup JDK
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'temurin'
+          java-version: '11'
+          cache: 'gradle'
+      - name: Build project
+        run: ./gradlew assemble
+    needs: validate-wrapper
