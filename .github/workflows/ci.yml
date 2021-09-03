@@ -69,7 +69,7 @@ jobs:
     name: "Publish test reports"
     runs-on: ubuntu-20.04
     if: success() || failure()
-    needs: build
+    needs: test
     steps:
       - name: Fetch Artifacts
         uses: actions/download-artifact@v2
