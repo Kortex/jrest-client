@@ -61,3 +61,24 @@ jobs:
           files: build/test-results/${{matrix.stage}}/*.xml
         if: always()
     needs: build
+
+  jar:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Setup JDK
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'temurin'
+          java-version: '11'
+          cache: 'gradle'
+      - name: Build Jar
+        run: ./gradlew jar
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: jrest-clien-jar
+          path: build/libs/*.jar
+          retention-days: 7
+    needs: [ build, test ]
