@@ -60,4 +60,4 @@ jobs:
         with:
           files: build/test-results/${{matrix.stage}}/*.xml
         if: always()
-      needs: build
+    needs: build
